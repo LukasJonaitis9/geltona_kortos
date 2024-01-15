@@ -21,9 +21,15 @@ class Deck:
         suits = ['Spades', 'Clubs', 'Hearts', 'Diamonds']
         self.cards = [Card(rank, suit) for rank in ranks for suit in suits]
         self.shuffle()
+        self.ensure_no_same_weight_adjacent()
 
     def shuffle(self):
         random.shuffle(self.cards)
+
+    def ensure_no_same_weight_adjacent(self):
+        for i in range(1, len(self.cards)):
+            while self.cards[i].weight == self.cards[i - 1].weight:
+                self.shuffle()
 
     def deal_card(self):
         return self.cards.pop()
@@ -37,42 +43,46 @@ def war():
         player1_card = player1_cards.pop(0)
         player2_card = player2_cards.pop(0)
 
-        print(f"Player 1: {player1_card.sign} vs Player 2: {player2_card.sign}")
+        print(f"Žaidėjas 1: {player1_card.sign} prieš Žaidėjas 2: {player2_card.sign}")
 
         if player1_card.weight > player2_card.weight:
-            print("Player 1 wins this round!\n")
+            print("Žaidėjas 1 laimi šį raundą!\n")
             player1_cards.extend([player1_card, player2_card])
         elif player1_card.weight < player2_card.weight:
-            print("Player 2 wins this round!\n")
+            print("Žaidėjas 2 laimi šį raundą!\n")
             player2_cards.extend([player1_card, player2_card])
         else:
-            print("War!")
-            war_cards = [player1_card, player2_card]
+            print("Karas!")
             while True:
                 if len(player1_cards) < 4 or len(player2_cards) < 4:
-                    print("Insufficient cards for war. Game over.")
+                    print("Nepakanka kortų karo metu. Žaidimas baigiamas.")
                     return
 
-                war_cards.extend([player1_cards.pop(0) for _ in range(4)])
-                war_cards.extend([player2_cards.pop(0) for _ in range(4)])
+                war_cards = [player1_card, player2_card]
+                for _ in range(4):
+                    war_cards.extend([player1_cards.pop(0) for _ in range(4)])
+                    war_cards.extend([player2_cards.pop(0) for _ in range(4)])
 
                 war_card1 = war_cards[-1]
                 war_card2 = war_cards[-2]
 
-                print(f"War Card 1: {war_card1.sign} | War Card 2: {war_card2.sign}")
+                print(f"Karo kortelė 1: {war_card1.sign} | Karo kortelė 2: {war_card2.sign}")
 
                 if war_card1.weight > war_card2.weight:
-                    print("Player 1 wins the war!\n")
+                    print("Žaidėjas 1 laimi karą!\n")
                     player1_cards.extend(war_cards)
                     break
                 elif war_card1.weight < war_card2.weight:
-                    print("Player 2 wins the war!\n")
+                    print("Žaidėjas 2 laimi karą!\n")
                     player2_cards.extend(war_cards)
                     break
 
 if __name__ == "__main__":
     war()
-# Kortų kaladė
+
+
+
+    #KORTU KALadė
 # Korta: objektas
 # -- rank (2-9, T, J, Q, K, A)
 # -- suit (spades, clubs, hearts, diamonds)
