@@ -27,8 +27,8 @@ class Deck:
         random.shuffle(self.cards)
 
     def ensure_no_same_weight_adjacent(self):
-        for i in range(1, len(self.cards)):
-            while self.cards[i].weight == self.cards[i - 1].weight:
+        for skip in range(1, len(self.cards)):
+            while self.cards[skip].weight == self.cards[skip - 1].weight:
                 self.shuffle()
 
     def deal_card(self):
